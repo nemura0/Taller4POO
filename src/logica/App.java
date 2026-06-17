@@ -4,11 +4,18 @@ Luis Molina / 21.564.225-9 / mixolydiann
 */
 package logica;
 
+import java.io.FileNotFoundException;
+
 public class App {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	public static void main(String[] args) throws FileNotFoundException {
+		
+		SistemaImpl sys = SistemaImpl.getInstancia();
+		
+		sys.loadData("Sobres.txt");
+		
+		
+		
 	}
 
 }
