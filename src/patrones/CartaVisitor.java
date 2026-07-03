@@ -5,53 +5,38 @@ import dominio.Item;
 import dominio.Pokemon;
 import dominio.Supporter;
 
+/** visitor que calcula el poder de una carta segun su tipo */
 public class CartaVisitor implements Visitor {
-	
-	private double calculatedPower;
-	private double calculatedBonus;
-	private int calculatedSupport;
-	private int calculatedVenergy;
+
+	private int poder;
 
 	@Override
 	public void visit(Pokemon pokemon) {
-		int power = (pokemon.getDmg()/pokemon.getCantEnergy()) * 100;
-		calculatedPower = power;
+		// division entera como pide el readme. guarda por si vienen 0 energias asi no revienta
+		if (pokemon.getCantEnergy() == 0) {
+			poder = 0;
+		} else {
+			poder = (pokemon.getDmg() / pokemon.getCantEnergy()) * 100;
+		}
 	}
 
 	@Override
 	public void visit(Item item) {
-		int bonus = item.getBonus() * 20;
-		calculatedBonus = bonus;
+		poder = item.getBonus() * 20;
 	}
 
 	@Override
 	public void visit(Supporter support) {
-		int Vsupport = support.getEffectsbyturn() * 50;
-		calculatedSupport = Vsupport;
+		poder = support.getEffectsbyturn() * 50;
 	}
 
 	@Override
 	public void visit(Energy energy) {
-		int Venergy = 1;
-		calculatedVenergy = Venergy; // lol
+		poder = 1; // energy vale 1 por defecto
 	}
 
-	public double getCalculatedPower() {
-		return calculatedPower;
+	public int getPoder() {
+		return poder;
 	}
 
-	public double getCalculatedBonus() {
-		return calculatedBonus;
-	}
-
-	public int getCalculatedSupport() {
-		return calculatedSupport;
-	}
-
-	public int getCalculatedVenergy() {
-		return calculatedVenergy;
-	}
-
-	
-	
 }
