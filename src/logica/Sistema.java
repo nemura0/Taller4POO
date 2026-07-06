@@ -22,5 +22,7 @@ public interface Sistema {
 	void ordenar();
 
 	void guardar();
+	
+	void modificarCarta(Carta c);
 
 }

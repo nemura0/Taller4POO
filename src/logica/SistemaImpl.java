@@ -91,4 +91,12 @@ public class SistemaImpl implements Sistema {
 		}
 	}
 
+	@Override
+	public void modificarCarta(Carta c) {
+		// La carta ya fue modificada en memoria mediante sus setters.
+		// Solo necesitamos llamar a guardar() para sobrescribir el TXT 
+		// y asegurar la persistencia de datos.
+		guardar();
+	}
+
 }

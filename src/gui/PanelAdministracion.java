@@ -141,16 +141,61 @@ public class PanelAdministracion extends JPanel implements ActionListener {
 	}
 
 	private void modificar() {
-		// TODO (Luis): completar la modificacion de una carta.
-		// idea: tomar la carta elegida en comboEliminar, mirar su tipo con getType()
-		// y segun el tipo pedir el nuevo valor y usar el setter que corresponde:
-		//   Pokemon   -> setDmg / setCantEnergy
-		//   Item      -> setBonus
-		//   Supporter -> setEffectsbyturn
-		//   Energy    -> setElement
-		// al final llamar a sistema.guardar() y panelColeccion.refrescar().
-		// el metodo agregar() de mas arriba sirve de ejemplo para leer campos y validar.
-		JOptionPane.showMessageDialog(this, "modificar: pendiente por completar");
+		// Obtener la carta seleccionada
+		Carta c = (Carta) comboEliminar.getSelectedItem();
+		if (c == null) {
+			JOptionPane.showMessageDialog(this, "No hay carta seleccionada para modificar.");
+			return;
+		}
+
+		try {
+			// instanceof para ver el tipo de cartini y castear
+			if (c instanceof dominio.Pokemon) {
+				dominio.Pokemon p = (dominio.Pokemon) c;
+				
+				// Leemos los campos correspondientes a Pokemon
+				int nuevoDano = Integer.parseInt(campoDano.getText().trim());
+				int nuevasEnergias = Integer.parseInt(campoEnergias.getText().trim());
+				
+				// Modificamos usando sus setters específicos
+				p.setDmg(nuevoDano);
+				p.setCantEnergy(nuevasEnergias);
+				
+			} else if (c instanceof dominio.Item) {
+				dominio.Item i = (dominio.Item) c;
+				
+				int nuevoBonus = Integer.parseInt(campoBonificacion.getText().trim());
+				i.setBonus(nuevoBonus);
+				
+			} else if (c instanceof dominio.Supporter) {
+				dominio.Supporter s = (dominio.Supporter) c;
+				
+				int nuevosEfectos = Integer.parseInt(campoEfectos.getText().trim());
+				s.setEffectsbyturn(nuevosEfectos);
+				
+			} else if (c instanceof dominio.Energy) {
+				dominio.Energy e = (dominio.Energy) c;
+				
+				String nuevoElemento = campoElemento.getText().trim();
+				if (nuevoElemento.isEmpty()) {
+					throw new IllegalArgumentException("El elemento no puede estar vacío.");
+				}
+				e.setElement(nuevoElemento);
+			}
+
+			// Avisar al sistema que la carta fue modificada para que guarde en el TXT
+			sistema.modificarCarta(c);
+			
+			// Refrescar la GUI y limpiar los campos
+			panelColeccion.refrescar();
+			limpiar();
+			JOptionPane.showMessageDialog(this, "¡Carta modificada con éxito!");
+
+		} catch (NumberFormatException ex) {
+			JOptionPane.showMessageDialog(this, "Error: Revisa que los campos numéricos no tengan letras o estén vacíos.");
+		} catch (IllegalArgumentException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		}
 	}
 
 	// recarga el combo de eliminar con las cartas actuales
